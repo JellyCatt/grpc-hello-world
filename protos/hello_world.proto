@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package hello_world;
+
+service Greeting {
+  rpc Greet(GreetAsk) returns (GreetReply);
+}
+
+message GreetAsk {
+  string my_name = 1;
+}
+
+message GreetReply {
+  string polite_reply = 1;
+}
