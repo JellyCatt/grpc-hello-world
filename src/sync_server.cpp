@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <iostream>
 #include <string>
 #include <thread>
@@ -8,16 +9,17 @@
 #include <grpcpp/health_check_service_interface.h>
 
 #include "hello_world.grpc.pb.h"
-
-class AsyncGreetServerImpl final : public hello_world::Greeting::Service {
+class SyncGreetServerImpl final : public hello_world::Greeting::Service {
   grpc::Status Greet(::grpc::ServerContext* context, const ::hello_world::GreetAsk* request, ::hello_world::GreetReply* response) override {
     response->set_polite_reply(std::string("Politely say hello to ") + request->my_name());
+    sleep(1);
     return grpc::Status::OK;
   }
 };
+
 int main() {
   std::string server_address("127.0.0.1:55555");
-  AsyncGreetServerImpl my_async_server;
+  SyncGreetServerImpl my_sync_server;
 
   grpc::EnableDefaultHealthCheckService(true);
   grpc::reflection::InitProtoReflectionServerBuilderPlugin();
@@ -26,7 +28,7 @@ int main() {
   builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
   // Register "service" as the instance through which we'll communicate with
   // clients. In this case it corresponds to an *synchronous* service.
-  builder.RegisterService(&my_async_server);
+  builder.RegisterService(&my_sync_server);
   // Finally assemble the server.
   std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
   std::cout << "Server listening on " << server_address << std::endl;
@@ -42,7 +44,11 @@ int main() {
     std::cout << "Shutting down server..." << std::endl;
     server->Shutdown();
   });
-  server->Wait();
+  // server->Wait();
+  for (int i = 0; i < 10; i++) {
+    sleep(1);
+    std::cout << i << std::endl;
+  }
   std::cout << "After wait :)" << std::endl;
   input_thread.join();
 

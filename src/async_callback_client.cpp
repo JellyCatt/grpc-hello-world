@@ -1,6 +1,9 @@
+#include <unistd.h>
+
 #include <iostream>
 #include <string>
 #include <memory>
+#include <chrono>
 
 #include <grpcpp/grpcpp.h>
 #include "hello_world.grpc.pb.h"
@@ -28,14 +31,18 @@ int main(int argc, char* argv[]) {
   grpc::ClientContext context;
 
     // The actual RPC.
-  grpc::Status status = my_stub->Greet(&context, request, &reply);
+  my_stub->async()->Greet(&context, &request, &reply, [&](grpc::Status stt) {
+                                                        if (stt.ok()) {
+                                                          std::cout << "Successfully greet" << std::endl;
+                                                          std::cout << reply.polite_reply() << std::endl;
+                                                        } else {
+                                                          std::cout << "Cannot greet that guy..." << std::endl;
+                                                        }});
+
   std::cout << "Right after Greeting" << std::endl;
-    // Act upon its status.
-  if (status.ok()) {
-    std::cout << reply.polite_reply() << std::endl;
-  } else {
-    std::cout << status.error_code() << ": " << status.error_message()
-              << std::endl;
-    std::cout <<  "RPC failed: Cannot Greet to the person..." << std::endl;
+  for (int i = 0; i < 10; i++) {
+    std::cout << "counting: " << i << std::endl;
+    sleep(1);
   }
+  return 0;
 }
