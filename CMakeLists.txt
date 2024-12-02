@@ -27,6 +27,11 @@ target_link_libraries(sync_client PUBLIC GeneratedSrc)
 add_executable(async_client src/async_callback_client.cpp)
 target_include_directories(async_client INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(async_client PUBLIC GeneratedSrc)
+
+add_executable(async_server src/async_callback_server.cpp)
+target_include_directories(async_server INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(async_server PUBLIC GeneratedSrc)
+
 # Protobuf::libprotobuf
 # gRPC::grpc++_reflection
 # gRPC::grpc++

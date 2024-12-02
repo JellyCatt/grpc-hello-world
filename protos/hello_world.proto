@@ -5,6 +5,7 @@ package hello_world;
 service Greeting {
   rpc Greet(GreetAsk) returns (GreetReply);
   rpc WeirdGreet(GreetAsk) returns (stream GreetReply);
+  rpc StrangeGreet(stream GreetAsk) returns (GreetReply);
 }
 
 message GreetAsk {
