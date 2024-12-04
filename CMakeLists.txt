@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(JSON_INTEGRATION VERSION 1.0)
 
+# set(CMAKE_BUILD_TYPE "Debug")
+
 message(${CMAKE_BINARY_DIR})
 list(APPEND CMAKE_PREFIX_PATH "/home/nghi/local_grpc")
 find_package(Protobuf CONFIG REQUIRED)
@@ -31,6 +33,14 @@ target_link_libraries(async_client PUBLIC GeneratedSrc)
 add_executable(async_server src/async_callback_server.cpp)
 target_include_directories(async_server INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(async_server PUBLIC GeneratedSrc)
+
+add_executable(async_callback_serversidestream_server src/async_callback_serversidestream_server.cpp)
+target_include_directories(async_callback_serversidestream_server INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(async_callback_serversidestream_server PUBLIC GeneratedSrc pthread)
+
+add_executable(async_callback_serversidestream_client src/async_callback_serversidestream_client.cpp)
+target_include_directories(async_callback_serversidestream_client INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(async_callback_serversidestream_client PUBLIC GeneratedSrc)
 
 # Protobuf::libprotobuf
 # gRPC::grpc++_reflection
