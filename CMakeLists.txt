@@ -42,6 +42,13 @@ add_executable(async_callback_serversidestream_client src/async_callback_servers
 target_include_directories(async_callback_serversidestream_client INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(async_callback_serversidestream_client PUBLIC GeneratedSrc)
 
+add_executable(async_callback_clientsidestream_server src/async_callback_clientsidestream_server.cpp)
+target_include_directories(async_callback_clientsidestream_server INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(async_callback_clientsidestream_server PUBLIC GeneratedSrc)
+
+add_executable(async_callback_clientsidestream_client src/async_callback_clientsidestream_client.cpp)
+target_include_directories(async_callback_clientsidestream_client INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(async_callback_clientsidestream_client PUBLIC GeneratedSrc)
 # Protobuf::libprotobuf
 # gRPC::grpc++_reflection
 # gRPC::grpc++
